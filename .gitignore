@@ -5,6 +5,7 @@ export.cfg
 export_presets.cfg
 .godot/
 savedata.json
+export/
 
 # Mono-specific ignores
 .mono/
