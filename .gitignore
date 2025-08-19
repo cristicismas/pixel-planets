@@ -3,6 +3,8 @@
 .import/
 export.cfg
 export_presets.cfg
+.godot/
+savedata.json
 
 # Mono-specific ignores
 .mono/

@@ -1,16 +1,16 @@
 [gd_scene load_steps=21 format=3 uid="uid://do1rqlsl7j8w1"]
 
-[ext_resource type="Script" path="res://GUI/GUI.gd" id="1"]
+[ext_resource type="Script" uid="uid://dlbe37g0wody7" path="res://GUI/GUI.gd" id="1"]
 [ext_resource type="Theme" uid="uid://bv2fro5jwglrq" path="res://GUI/Theme.tres" id="2"]
 [ext_resource type="PackedScene" uid="uid://crdxh2i35dorc" path="res://Planets/Rivers/Rivers.tscn" id="3"]
 [ext_resource type="Texture2D" uid="uid://rso35gm4eqyp" path="res://stars.png" id="4"]
-[ext_resource type="Script" path="res://GUI/SpritesheetPopup.gd" id="5"]
+[ext_resource type="Script" uid="uid://b1qn20lhdusef" path="res://GUI/SpritesheetPopup.gd" id="5"]
 [ext_resource type="Texture2D" uid="uid://csvjlkmt71tp0" path="res://GUI/progress-under.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://c3dko8im0fvb5" path="res://GUI/progress-over.png" id="7"]
 [ext_resource type="PackedScene" uid="uid://blrnap0k35tav" path="res://GUI/ColorPickerButton.tscn" id="8"]
 [ext_resource type="Material" uid="uid://bhb7yqvdm2fuf" path="res://GUI/StarParticles.tres" id="9"]
-[ext_resource type="Script" path="res://GUI/GifPopup.gd" id="10"]
-[ext_resource type="Script" path="res://GUI/ImportExportPopup.gd" id="11"]
+[ext_resource type="Script" uid="uid://ccem7tm0jvled" path="res://GUI/GifPopup.gd" id="10"]
+[ext_resource type="Script" uid="uid://c0383rhx4olwh" path="res://GUI/ImportExportPopup.gd" id="11"]
 
 [sub_resource type="Shader" id="1"]
 code = "shader_type canvas_item;
@@ -55,14 +55,6 @@ particles_anim_loop = false
 [sub_resource type="ViewportTexture" id="7"]
 viewport_path = NodePath("PlanetViewport")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ofrx"]
-resource_local_to_scene = true
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k4bca"]
 resource_local_to_scene = true
 bg_color = Color(1, 1, 1, 1)
@@ -73,6 +65,14 @@ border_width_bottom = 2
 border_color = Color(1, 1, 1, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8jpl7"]
+resource_local_to_scene = true
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ofrx"]
 resource_local_to_scene = true
 border_width_left = 2
 border_width_top = 2
@@ -117,6 +117,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 7.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -125,6 +126,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.831373)
@@ -134,10 +136,10 @@ modulate = Color(1, 1, 1, 0.513726)
 material = SubResource("3")
 position = Vector2(256, 150)
 amount = 50
-process_material = ExtResource("9")
 texture = ExtResource("4")
 lifetime = 50.0
 preprocess = 50.0
+process_material = ExtResource("9")
 
 [node name="PlanetViewport" type="SubViewport" parent="."]
 transparent_bg = true
@@ -161,6 +163,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 4.0
+offset_bottom = 21.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -185,18 +189,20 @@ stretch_mode = 5
 [node name="Settings" type="Control" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Settings"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 1.0
-offset_right = -1.99998
-offset_bottom = 2.0
+offset_left = 27.0
+offset_top = 16.0
+offset_right = 25.0
+offset_bottom = 27.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.813609, 0.813609)
+pivot_offset = Vector2(0.801117, 0.664732)
 theme_override_constants/separation = 0
 
 [node name="Label5" type="Label" parent="HBoxContainer/Settings/VBoxContainer"]
@@ -310,9 +316,9 @@ theme_override_constants/separation = 2
 
 [node name="ColorPickerButton" parent="HBoxContainer/Settings/VBoxContainer/ColorButtonHolder" instance=ExtResource("8")]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_3ofrx")
 theme_override_styles/hover = SubResource("StyleBoxFlat_k4bca")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8jpl7")
+theme_override_styles/normal = SubResource("StyleBoxFlat_3ofrx")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Settings/VBoxContainer"]
 layout_mode = 2
@@ -357,6 +363,11 @@ layout_mode = 2
 layout_mode = 2
 theme = ExtResource("2")
 text = "Export:"
+
+[node name="ExportPath" type="Button" parent="HBoxContainer/Settings/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2")
+text = "Set save path"
 
 [node name="ExportPNG" type="Button" parent="HBoxContainer/Settings/VBoxContainer"]
 layout_mode = 2
@@ -753,6 +764,17 @@ scale = Vector2(0.5, 0.5)
 theme = ExtResource("2")
 presets_visible = false
 
+[node name="SelectPathInput" type="TextEdit" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 19.4779
+offset_top = 289.602
+offset_right = 303.478
+offset_bottom = 314.602
+theme_override_colors/background_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 8
+placeholder_text = "Your new savepath"
+
 [connection signal="gui_input" from="HBoxContainer/PlanetHolder" to="." method="_on_planet_holder_gui_input"]
 [connection signal="item_selected" from="HBoxContainer/Settings/VBoxContainer/OptionButton" to="." method="_on_OptionButton_item_selected"]
 [connection signal="text_changed" from="HBoxContainer/Settings/VBoxContainer/Seed/SeedText" to="." method="_on_LineEdit_text_changed"]
@@ -764,6 +786,7 @@ presets_visible = false
 [connection signal="pressed" from="HBoxContainer/Settings/VBoxContainer/HBoxContainer/RandomizeColors" to="." method="_on_RandomizeColors_pressed"]
 [connection signal="pressed" from="HBoxContainer/Settings/VBoxContainer/HBoxContainer/ResetColors" to="." method="_on_ResetColors_pressed"]
 [connection signal="pressed" from="HBoxContainer/Settings/VBoxContainer/HBoxContainer3/ImportExportColors" to="." method="_on_ImportExportColors_pressed"]
+[connection signal="pressed" from="HBoxContainer/Settings/VBoxContainer/ExportPath" to="." method="_on_export_path_pressed"]
 [connection signal="pressed" from="HBoxContainer/Settings/VBoxContainer/ExportPNG" to="." method="_on_ExportPNG_pressed"]
 [connection signal="pressed" from="HBoxContainer/Settings/VBoxContainer/ExportGIF" to="." method="_on_ExportGIF_pressed"]
 [connection signal="pressed" from="HBoxContainer/Settings/VBoxContainer/ExportSpriteSheet" to="." method="_on_ExportSpriteSheet_pressed"]
@@ -783,3 +806,4 @@ presets_visible = false
 [connection signal="pressed" from="GifPopup/PopupFront/VBoxContainer/HBoxContainer/CancelButton" to="GifPopup" method="_on_CancelButton_pressed"]
 [connection signal="pressed" from="GifPopup/PopupFront/VBoxContainer/HBoxContainer/ExportButton" to="GifPopup" method="_on_ExportButton_pressed"]
 [connection signal="pressed" from="Panel/PickerExit" to="." method="_on_PickerExit_pressed"]
+[connection signal="gui_input" from="SelectPathInput" to="." method="_on_select_path_input_gui_input"]

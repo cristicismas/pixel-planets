@@ -16,6 +16,8 @@ extends Control
 const GIFExporter = preload("res://addons/gdgifexporter/exporter.gd")
 const MedianCutQuantization = preload("res://addons/gdgifexporter/quantization/median_cut.gd")
 
+const SETTINGS_PATH := "res://savedata.json"
+
 @onready var planets = {
 	"Terran Wet": preload("res://Planets/Rivers/Rivers.tscn"),
 	"Terran Dry": preload("res://Planets/DryTerran/DryTerran.tscn"),	
@@ -37,6 +39,8 @@ var should_dither = true
 var chosen_type = "Terran Wet"
 
 func _ready():
+	%SelectPathInput.hide()
+
 	for k in planets.keys():
 		optionbutton.add_item(k)
 	layeroptions.get_popup().connect("id_pressed", Callable(self, "_on_layer_selected"))
@@ -194,6 +198,52 @@ func export_spritesheet(sheet_size, progressbar, pixel_margin = 0.0):
 	save_image(sheet, chosen_type + " - " + str(sd) + " - spritesheet")
 	$Popup.visible = false
 
+
+func save_json(data: Dictionary, path: StringName) -> void:
+	var save_file = FileAccess.open(path, FileAccess.WRITE)
+	
+	save_file.store_line(JSON.stringify(data))
+
+
+func get_saved_path() -> String:
+	if not FileAccess.file_exists(SETTINGS_PATH):
+		var dict: Dictionary = {"savepath": "res://"}
+		save_json(dict, SETTINGS_PATH)
+
+	var save_file = FileAccess.open(SETTINGS_PATH, FileAccess.READ)
+	var json_line = save_file.get_as_text()
+	var json = JSON.new()
+	var parse_result = json.parse(json_line)
+
+	if not parse_result == OK:
+		push_error("JSON Parse Error: ", json.get_error_message(), " in ", json_line, " at line ", json.get_error_line())
+		return "res://"
+
+	var json_data = json.get_data()
+
+	var save_path: String = json_data["savepath"]
+
+	if save_path == "":
+		return "res://"
+	else:
+		return save_path
+
+
+func _on_export_path_pressed() -> void:
+	if %SelectPathInput.visible:
+		%SelectPathInput.hide()
+	else:
+		%SelectPathInput.text = get_saved_path()
+		%SelectPathInput.show()
+
+
+func _on_select_path_input_gui_input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		if event.pressed and event.keycode == KEY_ENTER:
+			save_json({"savepath": %SelectPathInput.text}, SETTINGS_PATH)
+			%SelectPathInput.hide()
+
+
 func save_image(img, file_name):
 	if OS.has_feature('web'):
 		JavaScriptBridge.download_buffer(img.save_png_to_buffer(), file_name, "image/png")
@@ -201,7 +251,8 @@ func save_image(img, file_name):
 		if OS.get_name() == "OSX":
 			img.save_png("user://%s.png"%file_name)
 		else:
-			img.save_png("res://%s.png"%file_name)
+			var savepath := get_saved_path()
+			img.save_png("%s%s.png" % [savepath, file_name])
 
 func _on_ExportSpriteSheet_pressed():
 	$Panel.visible = false
@@ -327,3 +378,4 @@ func _on_planet_holder_gui_input(event):
 		
 		if $Panel.visible:
 			_close_picker()
+
