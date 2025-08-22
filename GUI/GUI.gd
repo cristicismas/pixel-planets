@@ -166,7 +166,7 @@ func _on_ExportPNG_pressed():
 	var source_rect = Rect2(source_xy, source_xy,source_size,source_size)
 	image.blit_rect(tex, source_rect, Vector2(0,0))
 	
-	save_image(image, chosen_type + " - " + str(sd))
+	save_image(image, chosen_type + "_" + str(sd))
 
 func export_spritesheet(sheet_size, progressbar, pixel_margin = 0.0):
 	var planet = viewport_planet.get_child(0)
@@ -231,6 +231,7 @@ func get_saved_path() -> String:
 
 func _on_export_path_pressed() -> void:
 	if %SelectPathInput.visible:
+		save_json({"savepath": %SelectPathInput.text}, SETTINGS_PATH)
 		%SelectPathInput.hide()
 	else:
 		%SelectPathInput.text = get_saved_path()
