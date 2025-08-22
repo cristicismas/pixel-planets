@@ -19,24 +19,24 @@ const MedianCutQuantization = preload("res://addons/gdgifexporter/quantization/m
 const SETTINGS_PATH := "res://savedata.json"
 
 @onready var planets = {
-	"Terran Wet": preload("res://Planets/Rivers/Rivers.tscn"),
-	"Terran Dry": preload("res://Planets/DryTerran/DryTerran.tscn"),	
-	"Islands": preload("res://Planets/LandMasses/LandMasses.tscn"),
-	"No atmosphere": preload("res://Planets/NoAtmosphere/NoAtmosphere.tscn"),
-	"Gas giant 1": preload("res://Planets/GasPlanet/GasPlanet.tscn"),
-	"Gas giant 2": preload("res://Planets/GasPlanetLayers/GasPlanetLayers.tscn"),
-	"Ice World": preload("res://Planets/IceWorld/IceWorld.tscn"),
-	"Lava World": preload("res://Planets/LavaWorld/LavaWorld.tscn"),
-	"Asteroid": preload("res://Planets/Asteroids/Asteroid.tscn"),
-	"Black Hole": preload("res://Planets/BlackHole/BlackHole.tscn"),
-	"Galaxy": preload("res://Planets/Galaxy/Galaxy.tscn"),
-	"Star": preload("res://Planets/Star/Star.tscn"),
+	"terran_wet": preload("res://Planets/Rivers/Rivers.tscn"),
+	"terran_dry": preload("res://Planets/DryTerran/DryTerran.tscn"),	
+	"islands": preload("res://Planets/LandMasses/LandMasses.tscn"),
+	"no_atmosphere": preload("res://Planets/NoAtmosphere/NoAtmosphere.tscn"),
+	"gas_giant_1": preload("res://Planets/GasPlanet/GasPlanet.tscn"),
+	"gas_giant_2": preload("res://Planets/GasPlanetLayers/GasPlanetLayers.tscn"),
+	"ice_world": preload("res://Planets/IceWorld/IceWorld.tscn"),
+	"lava_world": preload("res://Planets/LavaWorld/LavaWorld.tscn"),
+	"asteroid": preload("res://Planets/Asteroids/Asteroid.tscn"),
+	"black_hole": preload("res://Planets/BlackHole/BlackHole.tscn"),
+	"galaxy": preload("res://Planets/Galaxy/Galaxy.tscn"),
+	"star": preload("res://Planets/Star/Star.tscn"),
 }
 var pixels = 100.0
 var sd = 0
 var colors = []
 var should_dither = true
-var chosen_type = "Terran Wet"
+var chosen_type = "terran_wet"
 
 func _ready():
 	%SelectPathInput.hide()
@@ -47,7 +47,7 @@ func _ready():
 	$ImportExportPopup.connect("set_colors", Callable(self, "_on_import_colors_set"))
 
 	_seed_random()
-	_create_new_planet(planets["Terran Wet"])
+	_create_new_planet(planets["terran_wet"])
 
 
 func _on_OptionButton_item_selected(index):
@@ -149,7 +149,7 @@ func _on_colorbutton_color_picked(color, index):
 
 func _seed_random():
 	randomize()
-	sd = randi()
+	sd = randi() % 100
 	seed(sd)
 	seedtext.text = str(sd)
 	viewport_planet.get_child(0).set_seed(sd)
@@ -195,7 +195,7 @@ func export_spritesheet(sheet_size, progressbar, pixel_margin = 0.0):
 	
 	
 	planet.override_time = false
-	save_image(sheet, chosen_type + " - " + str(sd) + " - spritesheet")
+	save_image(sheet, chosen_type + "_" + str(sd) + "_spritesheet")
 	$Popup.visible = false
 
 
